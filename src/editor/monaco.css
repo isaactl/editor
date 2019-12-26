@@ -1,0 +1,6 @@
+.monaco-container {
+    width: 400px;
+    display: flex;
+    border: solid 1px rgb(133, 184, 177);
+    border-radius: 10px;
+}

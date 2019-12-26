@@ -1,0 +1,10 @@
+.editor-container {
+    width: 900px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    /* border: solid 1px rgb(133, 184, 177); */
+    /* border-radius: 2px; */
+    /* box-shadow: ; */
+}
