@@ -10,6 +10,7 @@ class KindPicker extends React.Component {
             data: null
         }
     }
+    
     loadData = () => {
         var api = 'https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json';
         axios.get(api).then((response) => {
@@ -30,9 +31,8 @@ class KindPicker extends React.Component {
         }).catch(function (err) {
             console.log(err)
         })
-
-
     }
+
     render() {
         if (this.state.data == null) {
             this.loadData()

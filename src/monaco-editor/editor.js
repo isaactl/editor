@@ -1,36 +1,90 @@
 import React from 'react';
 import MonacoEditor from 'react-monaco-editor';
+import SwaggerParser from 'swagger-parser';
+import {Validator} from 'jsonschema';
+import axios from 'axios'
 
 class Monaco extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             code: 'kind: Deployment\nname: hello world',
-        }
+            schema: null,
+        };
+        this.handleClick = this.handleClick.bind(this);
     }
+
+    handleClick() {
+        console.log(this.state.schema);
+        let code = this.refs.monaco.editor.getValue();
+        let validator = new Validator();
+        console.log(validator.validate(code, this.state.schema));
+    }
+
+    loadData() {
+        let api = 'https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json';
+        axios.get(api).then((response) => {
+            SwaggerParser.validate(response.data, (err, api) => {
+                if (err) {
+                    console.error(err);
+                }
+                else {
+                    console.log("API name: %s, Version: %s", api.info.title, api.info.version);
+                    // console.log(api.definitions["io.k8s.api.apps.v1.Deployment"])
+                    // console.log(JSON.stringify(api.definitions["io.k8s.api.apps.v1.Deployment"]))
+                    let schema = api.definitions["io.k8s.api.apps.v1.Deployment"];
+                    console.log(schema);
+                    this.setState({schema: schema});
+                }
+            });
+        }).catch(function (err) {
+            console.log(err)
+        })
+    }
+
+    editorWillMount(monaco) {
+        // console.log("will mount")
+    }
+
     editorDidMount(editor, monaco) {
-        console.log('editorDidMount', editor);
+        // console.log('editorDidMount', editor);
         editor.focus();
     }
+
     onChange(newValue, e) {
-        console.log('onChange', newValue, e);
+        // console.log('onChange', newValue, e);
     }
+
     render() {
-        const code = this.state.code;
+        if (this.state.schema == null) {
+            this.loadData()
+        }
+
         const options = {
             selectOnLineNumbers: true
         };
+
         return (
-            <MonacoEditor
-                width="800"
-                height="600"
-                language="yaml"
-                theme="vs-dark"
-                value={code}
-                options={options}
-                onChange={this.onChange}
-                editorDidMount={this.editorDidMount}
-            />
+            <div>
+                <input
+                    type="button"
+                    value="validate"
+                    onClick={this.handleClick.bind(this)}
+                />
+                <MonacoEditor
+                    ref="monaco"
+                    width="800"
+                    height="600"
+                    language="yaml"
+                    theme="vs-dark"
+                    value={this.state.code}
+                    options={options}
+                    onChange={this.onChange}
+                    editorWillMount={this.editorWillMount}
+                    editorDidMount={this.editorDidMount}
+                    context={this.state.schema}
+                />
+            </div>
         );
     }
 }
