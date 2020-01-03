@@ -11,14 +11,23 @@ class Monaco extends React.Component {
             code: 'kind: Deployment\nname: hello world',
             schema: null,
         };
-        this.handleClick = this.handleClick.bind(this);
+        this.validate = this.validate.bind(this);
     }
 
-    handleClick() {
-        console.log(this.state.schema);
+    validate() {
+        // console.log(this.state.schema);
         let code = this.refs.monaco.editor.getValue();
         let validator = new Validator();
         console.log(validator.validate(code, this.state.schema));
+    }
+
+    componentDidMount() {
+        this.setState({monaco: this.refs.monaco})
+        this.refs.monaco.editor.onDidChangeModelContent(this.handleMonacoChangeEvent)
+    }
+
+    handleMonacoChangeEvent(e) {
+        console.log(e)
     }
 
     loadData() {
@@ -33,7 +42,7 @@ class Monaco extends React.Component {
                     // console.log(api.definitions["io.k8s.api.apps.v1.Deployment"])
                     // console.log(JSON.stringify(api.definitions["io.k8s.api.apps.v1.Deployment"]))
                     let schema = api.definitions["io.k8s.api.apps.v1.Deployment"];
-                    console.log(schema);
+
                     this.setState({schema: schema});
                 }
             });
@@ -69,7 +78,7 @@ class Monaco extends React.Component {
                 <input
                     type="button"
                     value="validate"
-                    onClick={this.handleClick.bind(this)}
+                    onClick={this.validate}
                 />
                 <MonacoEditor
                     ref="monaco"
