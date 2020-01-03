@@ -1,6 +1,7 @@
 import React from 'react';
 import MonacoEditor from 'react-monaco-editor';
 import SwaggerParser from 'swagger-parser';
+import YAML from 'js-yaml';
 import {Validator} from 'jsonschema';
 import axios from 'axios'
 
@@ -15,10 +16,14 @@ class Monaco extends React.Component {
     }
 
     validate() {
-        // console.log(this.state.schema);
+        console.log(this.state.schema);
         let code = this.refs.monaco.editor.getValue();
         let validator = new Validator();
-        console.log(validator.validate(code, this.state.schema));
+        try {
+            console.log(validator.validate(YAML.load(code), this.state.schema));
+        }catch (e) {
+            console.log(e.message)
+        }
     }
 
     componentDidMount() {
