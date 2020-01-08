@@ -11,6 +11,8 @@ class Env extends Component {
         this.state = {
             schema: null,
         }
+
+        this.CustomFieldTemplate=this.CustomFieldTemplate.bind(this);
     }
 
     componentDidMount() {
@@ -29,6 +31,18 @@ class Env extends Component {
         });
     }
 
+    CustomFieldTemplate(props) {
+        const {id, classNames, label, help, required, description, errors, children} = props;
+        return (
+            <div className={classNames}>
+                <label htmlFor={id}>{label}{required ? "*" : null}</label>
+                {children}
+                {errors}
+                {help}
+            </div>
+        );
+    }
+
     // https://react-jsonschema-form.readthedocs.io/en/latest/advanced-customization/#field-template
     render() {
         if (this.state.schema == null)
@@ -39,6 +53,7 @@ class Env extends Component {
             <Form schema={this.state.schema.properties.spec.properties.template.properties.spec.properties.containers.items.properties.env}
                   onChange={log("changed")}
                   onSubmit={log("submitted")}
+                  FieldTemplate={this.CustomFieldTemplate}
                   onError={log("errors")} />
         )
     }
