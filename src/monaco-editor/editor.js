@@ -20,19 +20,20 @@ class Monaco extends React.Component {
         let code = this.refs.monaco.editor.getValue();
         let validator = new Validator();
         try {
-            console.log(validator.validate(YAML.load(code), this.state.schema));
+            let res = validator.validate(YAML.load(code), this.state.schema);
+            console.log(res.errors)
         }catch (e) {
             console.log(e.message)
         }
     }
 
     componentDidMount() {
-        this.setState({monaco: this.refs.monaco})
+        this.setState({monaco: this.refs.monaco});
         this.refs.monaco.editor.onDidChangeModelContent(this.handleMonacoChangeEvent)
     }
 
     handleMonacoChangeEvent(e) {
-        console.log(e)
+         // console.log(e)
     }
 
     loadData() {
@@ -58,7 +59,8 @@ class Monaco extends React.Component {
     }
 
     editorWillMount(monaco) {
-        // console.log("will mount")
+        console.log("will mount");
+        monaco.languages.yaml.yamlDefaults.setDiagnosticsOptions({})
     }
 
     editorDidMount(editor, monaco) {
@@ -71,12 +73,16 @@ class Monaco extends React.Component {
     }
 
     render() {
-        if (this.state.schema == null) {
-            this.loadData()
-        }
+        // if (this.state.schema == null) {
+        //     this.loadData()
+        // }
 
         const options = {
-            selectOnLineNumbers: true
+            selectOnLineNumbers: true,
+            language: 'yaml',
+            showFoldingControls: 'always',
+            autoIndent: 'full',
+            wrappingIndent: 'deepIndent'
         };
 
         return (
@@ -90,7 +96,6 @@ class Monaco extends React.Component {
                     ref="monaco"
                     width="800"
                     height="600"
-                    language="yaml"
                     theme="vs-dark"
                     value={this.state.code}
                     options={options}
