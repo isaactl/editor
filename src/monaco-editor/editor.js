@@ -36,7 +36,8 @@ class Monaco extends React.Component {
     }
 
     loadData() {
-        let api = 'https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json';
+        // let api = 'https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json';
+        let api = 'https://raw.githubusercontent.com/kubernetes/kubernetes/v1.14.9/api/openapi-spec/swagger.json';
         axios.get(api).then((response) => {
             SwaggerParser.validate(response.data, (err, api) => {
                 if (err) {
