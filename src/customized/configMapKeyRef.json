@@ -1,22 +1,16 @@
 {
-  "description": "Selects a key of a ConfigMap.",
+  "title": "Selects a key of a existing source.",
   "properties": {
     "key": {
-      "description": "The key to select.",
+      "title": "Key",
       "type": "string",
       "enum": [
-        "diwh",
-        "isekf"
       ]
     },
     "name": {
-      "description": "Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+      "title": "Name",
       "type": "string",
       "enum": []
-    },
-    "optional": {
-      "description": "Specify whether the ConfigMap or its key must be defined",
-      "type": "boolean"
     }
   },
   "required": [

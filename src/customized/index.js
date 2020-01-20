@@ -1,6 +1,6 @@
 import React from 'react';
 import Swagger from './swagger.json';
-import CMKeyRef from './configMapKeyRef.json';
+import ValueFrom from './configMapKeyRef.json';
 import Form from "react-jsonschema-form";
 import SwaggerParser from 'swagger-parser';
 
@@ -10,18 +10,28 @@ export default class extends React.Component {
         this.state = {
             schema: null,
             keyList: [],
-            selected: '',
-            formData: {}
+            nameList: [],
+            selectedKey: '',
+            formData: {},
         };
 
-        this._loadSwagger=this._loadSwagger.bind(this);
+        this._loadResources=this._loadResources.bind(this);
     }
 
     componentDidMount() {
-        // this._loadSwagger()
+        ValueFrom.properties.key = Object.assign(ValueFrom.properties.key, {
+            "enum": [
+                "soe",
+                "oiieklw",
+            ],
+        });
+        console.log(ValueFrom);
+        this.setState({schema: ValueFrom})
+        // this._loadResources()
     }
 
-    _loadSwagger() {
+    // load configmap / secret list from k8s cluster
+    _loadResources() {
         SwaggerParser.validate(Swagger, (err, api) => {
             if (err) {
                 console.error(err);
@@ -53,21 +63,27 @@ export default class extends React.Component {
     // https://jsfiddle.net/69z2wepo/68259/
     handleChange(data) {
         const formData = JSON.parse(JSON.stringify(data.formData));
-        console.log(formData)
-        if (this.state.selected !== formData.key) {
-            formData.name = formData.key + "_set";
-
-            CMKeyRef.properties.name = Object.assign(CMKeyRef.properties.name, {
-                "enum": [
-                    formData.key + "_v1",
-                    formData.key + "isekf"
-                ]
+        // console.log(formData);
+        if (this.state.selectedKey !== formData.key) {
+            formData.name = "";
+            // assign name list, TODO: load from k8s
+            const nameList = [
+                formData.key + "_v1",
+                formData.key + "isekf"
+            ];
+            ValueFrom.properties.name = Object.assign(ValueFrom.properties.name, {
+                "enum": nameList,
             });
 
             this.setState({
-                selected: formData.key,
+                selectedKey: formData.key,
+                nameList: nameList,
                 formData: formData,
             });
+        } else {
+            this.setState({
+                formData: formData
+            })
         }
     }
 
@@ -76,14 +92,13 @@ export default class extends React.Component {
     }
 
     render() {
-        // if (this.state.schema == null) {
-        //     return <div>Nothing to show</div>
-        // }
+        if (this.state.schema == null) {
+            return <div>Nothing to show</div>
+        }
 
         return (
             <Form
-                schema={CMKeyRef}
-                uiSchema={uiSchema}
+                schema={this.state.schema}
                 formData={this.state.formData}
                 onSubmit={this.onSubmit.bind(this)}
                 FieldTemplate={this.CustomFieldTemplate.bind(this)}
@@ -92,12 +107,3 @@ export default class extends React.Component {
         )
     }
 }
-
-const uiSchema = {
-    "key": {
-        "ui:autofocus": true,
-        "ui:options": {
-            backgroundColor: "yellow"
-        }
-    }
-};
