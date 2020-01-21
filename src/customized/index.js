@@ -1,6 +1,7 @@
 import React from 'react';
 import Swagger from './swagger.json';
 import Env from './env';
+import Resource from './resource';
 import SwaggerParser from 'swagger-parser';
 
 // load all schemas of kubernetes v1.14.9
@@ -37,7 +38,10 @@ export default class extends React.Component {
 
     render() {
         return (
-            <Env />
+            <div>
+                <Env />
+                <Resource />
+            </div>
         )
     }
 }
