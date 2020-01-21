@@ -1,11 +1,14 @@
 import React from 'react';
+// import Editor from './konstellate-editor/editor';
+// import Editor from './monaco-editor/editor';
+import Customized from './customized/index'
 import './App.css';
-import Editor from './editor/editor'
 
 function App() {
   return (
     <div className="App">
-      <Editor />
+      <h1>What to show?</h1>
+      <Customized />
     </div>
   );
 }
