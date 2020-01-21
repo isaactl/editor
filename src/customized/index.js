@@ -15,7 +15,7 @@ export default class extends React.Component {
     }
 
     componentDidMount() {
-        this._loadSwagger()
+        // this._loadSwagger()
     }
 
     // load config map / secret list from k8s cluster

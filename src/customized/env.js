@@ -7,22 +7,29 @@ export default class extends React.Component {
         super(props);
         this.state = {
             type: props.type,
-            schema: null,
+            schema: Env,
             keyList: [],
             nameList: [],
             selectedKey: '',
-            formData: {},
+            formData: [
+                {
+                    "name": "SERVICE_ID",
+                    "value": "foundation_metadata"
+                },
+                {
+                    "name": "SERVICE_SECRET",
+                    "valueFrom": {
+                        "secretKeyRef": {
+                            "name": "my-secret",
+                            "key": "FoundationService"
+                        }
+                    }
+                }
+            ],
         };
-
-        this._loadSwagger=this._loadSwagger.bind(this);
     }
 
     componentDidMount() {
-        // this._loadSwagger()
-    }
-
-    _loadSwagger() {
-
     }
 
     CustomFieldTemplate(props) {
@@ -41,7 +48,7 @@ export default class extends React.Component {
     // https://jsfiddle.net/69z2wepo/68259/
     handleChange(data) {
         const formData = JSON.parse(JSON.stringify(data.formData));
-        // console.log(formData);
+        // console.log(JSON.stringify(data.formData));
         if (this.state.selectedKey !== formData.key) {
             formData.name = "";
             // assign name list, TODO: load from k8s
@@ -70,13 +77,9 @@ export default class extends React.Component {
     }
 
     render() {
-        // if (this.state.schema == null) {
-        //     return <div>Nothing to show</div>
-        // }
-
         return (
             <Form
-                schema={Env}
+                schema={this.state.schema}
                 formData={this.state.formData}
                 onSubmit={this.onSubmit.bind(this)}
                 // FieldTemplate={this.CustomFieldTemplate.bind(this)}
