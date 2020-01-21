@@ -1,0 +1,34 @@
+{
+    "title": "Compute Resources",
+    "properties": {
+      "limits": {
+        "properties": {
+            "cpu": {
+                "title": "CPU",
+                "type": "string"
+            },
+            "memory": {
+                "title": "Memory",
+                "type": "string"
+            }
+        },
+        "title": "Limits",
+        "type": "object"
+      },
+      "requests": {
+        "properties": {
+            "cpu": {
+                "title": "CPU",
+                "type": "string"
+            },
+            "memory": {
+                "title": "Memory",
+                "type": "string"
+            }
+        },
+        "title": "Requests",
+        "type": "object"
+      }
+    },
+    "type": "object"
+}
