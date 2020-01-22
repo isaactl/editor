@@ -25,12 +25,11 @@ export default class extends React.Component {
                         }
                     }
                 }
-            ],
+            ]
         };
     }
 
-    componentDidMount() {
-    }
+    componentDidMount() {}
 
     CustomFieldTemplate(props) {
         const {id, classNames, label, help, required, description, errors, children} = props;

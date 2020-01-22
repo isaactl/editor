@@ -1,7 +1,7 @@
 import React from 'react';
 import Resource from './resource.json';
-import Form from "react-jsonschema-form";
-import './resource.css';
+import Form from 'react-jsonschema-form';
+import './resource.scss';
 
 export default class extends React.Component {
     constructor(props) {
@@ -41,7 +41,7 @@ export default class extends React.Component {
         const {id, classNames, label, help, required, description, errors, children} = props;
         return (
             <div className={classNames}>
-                <label htmlFor={id}>{label}{required ? "*" : null}</label>
+                <label htmlFor={id} style={{marginRight: "20px", width: "80px"}}>{label}{required ? "*" : null}</label>
                 {description}
                 {children}
                 {errors}
@@ -54,33 +54,10 @@ export default class extends React.Component {
         return (
             <Form
                 schema={this.state.schema}
-                uiSchema={uiSchema}
-                FieldTemplate={this.customFieldTemplate.bind(this)}
                 formData={this.state.formData}
-                fields={fields}
                 onSubmit={this.onSubmit.bind(this)}
                 onChange={this.handleChange.bind(this)}
             />
         )
     }
 }
-
-const uiSchema = {
-  limits: {
-      cpu: {
-        classNames: "tag"
-      },
-      memory: {
-        classNames: "tag"
-      }
-  }
-};
-
-const CustomTitleField = ({title, required}) => {
-    const legend = required ? title + '*' : title;
-    return <div id="custom">{legend}</div>;
-};
-
-const fields = {
-    TitleField: CustomTitleField
-};
