@@ -3,6 +3,7 @@ import Swagger from './swagger.json';
 import Env from './env';
 import Resource from './resource';
 import SwaggerParser from 'swagger-parser';
+import AwesomeComponent from './../components/env'
 
 // load all schemas of kubernetes v1.14.9
 export default class extends React.Component {
@@ -39,6 +40,7 @@ export default class extends React.Component {
     render() {
         return (
             <div>
+                <AwesomeComponent />
                 <Env />
                 <Resource />
             </div>
