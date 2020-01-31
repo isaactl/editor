@@ -11,6 +11,7 @@ export default class extends React.Component {
         super(props);
         this.state = {
             schemas: null,
+            loading: true,
         };
 
         this._loadSwagger=this._loadSwagger.bind(this);
@@ -40,7 +41,7 @@ export default class extends React.Component {
     render() {
         return (
             <div>
-                <AwesomeComponent />
+                <AwesomeComponent loading={this.state.loading}/>
                 <Env />
                 <Resource />
             </div>
