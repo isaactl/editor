@@ -1,6 +1,17 @@
 import {EventEmitter} from "events"
 
 export default class DataStore extends EventEmitter {
+    constructor(props) {
+        super();
+        this.state = {
+            serverList: null
+        }
+
+        this.handleChange=this.handleChange.bind(this)
+        this.triggerChangeEvent=this.triggerChangeEvent.bind(this)
+        this.getServices=this.getServices.bind(this)
+    }
+
     static myInstance = null
 
     static getInstance() {
@@ -22,22 +33,31 @@ export default class DataStore extends EventEmitter {
         this.addListener('change', callback)
     }
 
+    triggerChangeEvent() {
+        this.emit('change')
+    }
+
     removeChangeListener(callback) {
         console.log('unregister callback ' + callback.toString())
         this.removeListener('change', callback)
     }
 
-    getServices() {
-        let result = null
+    fetchData() {
         setTimeout(function () {
-            result = {
+            const result = {
                 'die': 'diek'
             };
-            this.dispatchEvent(new Event('change'))
-            console.log('get service' + JSON.stringify(result))
+            DataStore.myInstance.state.serverList = result
+            DataStore.myInstance.triggerChangeEvent()
         }, 4000)
+    }
 
-        console.log('get service outter' + JSON.stringify(result))
-        return result
+    getServices() {
+        if (this.state.serverList === null) {
+            this.fetchData()
+            return null
+        }
+        console.log('get service outer ' + JSON.stringify(this.state.serverList))
+        return this.state.serverList
     }
 }

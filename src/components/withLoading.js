@@ -1,7 +1,6 @@
 import React from "react"
 import { css } from "@emotion/core";
 import {ClipLoader} from "react-spinners"
-import DataStore from './dataStore'
 
 // Can be a string as well. Need to ensure each key-value pair ends with ;
 const override = css`
@@ -10,15 +9,14 @@ const override = css`
   border-color: red;
 `;
 
-let dataStore = DataStore.getInstance()
-
-function WithLoading(Component, selectData) {
+function WithLoading(Component, dataStore, fetchData) {
     return class extends React.Component {
         constructor(props) {
             super(props);
             this.state = {
                 loading: true,
-                data: selectData(dataStore, props)
+                data: fetchData(),
+                dataStore: dataStore,
             };
 
             this.handleChange=this.handleChange.bind(this)
@@ -35,7 +33,7 @@ function WithLoading(Component, selectData) {
         handleChange() {
             console.log('change')
             this.setState({
-                data: selectData(dataStore, this.props)
+                data: fetchData()
             })
         }
 

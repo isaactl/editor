@@ -1,7 +1,7 @@
 import React from 'react';
 // import Editor from './konstellate-editor/editor';
 // import Editor from './monaco-editor/editor';
-import Customized from './customized/index'
+// import Customized from './customized/index'
 import WithLoading from './components/withLoading'
 import Service from "./pages/services";
 import DataStore from './components/dataStore'
@@ -11,7 +11,8 @@ let dataStore = DataStore.getInstance()
 
 const ServiceList = WithLoading(
     Service,
-    (dataStore) => dataStore.getServices()
+    dataStore,
+    dataStore.getServices
 );
 
 function App() {
